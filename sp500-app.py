@@ -26,7 +26,18 @@ def load_data():
     return df
 
 df = load_data() 
-sector = df.groupby('GICS Sector')
 
-# Test
-st.dataframe(df)
+# Sidebar - Sector selection
+sorted_selected_unique = sorted( df['GICS Sector'].unique() )
+selected_sorted = st.sidebar.multiselect('Sector', sorted_selected_unique, sorted_selected_unique)
+
+# Filtering data
+df_selected_sector = df[ (df['GICS Sector'].isin(selected_sorted)) ]
+
+st.header('Display Companies in Selected Sector')
+st.write(f'Data Dimensions: {df_selected_sector.shape[0]} rows and {df_selected_sector.shape[1]} columns.')
+st.dataframe(df_selected_sector)
+
+
+
+
