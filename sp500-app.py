@@ -14,6 +14,19 @@ This app retrieves the list of the **S&P 500** (from Wikipedia) and its correspo
 * **Data source:** [Wikipedia](https://en.wikipedia.org/wiki/List_of_S%26P_500_companies).
 ''')
 
+st.header('User Input Feature')
 
+# Web scraping of S&P 500 data
+@st.cache
+def load_data():
+    url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
+    html = pd.read_html(url, header = 0)
+    df = html[0]
+    
+    return df
 
+df = load_data() 
+sector = df.groupby('GICS Sector')
 
+# Test
+st.dataframe(df)
