@@ -38,6 +38,28 @@ st.header('Display Companies in Selected Sector')
 st.write(f'Data Dimensions: {df_selected_sector.shape[0]} rows and {df_selected_sector.shape[1]} columns.')
 st.dataframe(df_selected_sector)
 
+# Download S&P500 data
+# https://discuss.streamlit.io/t/how-to-download-file-in-streamlit/1806
+def filedownload(df):
+    csv = df.to_csv(index=False)
+    b64 = base64.b64decode(csv.encode()).decode() # strings <-> bytes conversions
+    href = f'<a href="data:file/csv;base64,{b64}" download="SP500.csv">Download CSV File</a>'
+    
+    return href
+
+st.markdown(filedownload(df_selected_sector), unsafe_allow_html=True)
+
+# https://pypi.org/project/yfinance/
+data = yf.download(
+        tickers = list(df_selected_sector[:10].Symbol),
+        period = "ytd",
+        interval = "1d",
+        group_by = 'ticker',
+        auto_adjust = True,
+        prepost = True,
+        threads = True,
+        proxy = None
+    )
 
 
 
